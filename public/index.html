@@ -1,68 +1,438 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>TaskFlow</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TaskFlow - DevOps CI Demo</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            color: #1e293b;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .badge {
+            background: #22c55e;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* Main */
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 50px auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            color: #111827;
+        }
+
+        .hero p {
+            color: #64748b;
+            font-size: 17px;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(15, 23, 42, 0.1);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Input */
+        .input-area {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        #taskInput {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            outline: none;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        #taskInput:focus {
+            border-color: #6366f1;
+        }
+
+        .add-btn {
+            border: none;
+            background: #6366f1;
+            color: white;
+            padding: 14px 22px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #4f46e5;
+            transform: translateY(-1px);
+        }
+
+        /* Tasks */
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 18px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            background: #f8fafc;
+            transition: 0.2s;
+        }
+
+        .task-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .task-text {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .delete-btn {
+            border: none;
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .delete-btn:hover {
+            background: #fecaca;
+        }
+
+        .empty {
+            text-align: center;
+            color: #94a3b8;
+            padding: 25px;
+        }
+
+        /* DevOps section */
+        .devops {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .devops-box {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(15, 23, 42, 0.07);
+        }
+
+        .devops-box h3 {
+            margin-bottom: 8px;
+            color: #4f46e5;
+        }
+
+        .devops-box p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 45px;
+            padding-bottom: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* Mobile */
+        @media (max-width: 650px) {
+            .input-area {
+                flex-direction: column;
+            }
+
+            .devops {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .navbar {
+                padding: 16px 5%;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>TaskFlow - DevOps CI Demo</h1>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">🚀 TaskFlow</div>
+        <div class="badge">CI Pipeline Ready</div>
+    </nav>
 
-    <input id="taskInput" placeholder="Enter task">
-    <button onclick="addTask()">Add Task</button>
+    <!-- Main -->
+    <main class="container">
 
-    <ul id="taskList"></ul>
+        <section class="hero">
+            <h1>Task Management System</h1>
+            <p>
+                A simple application demonstrating Docker and Jenkins CI/CD workflow.
+            </p>
+        </section>
+
+        <!-- Task Card -->
+        <div class="card">
+
+            <div class="card-title">
+                📝 Manage Your Tasks
+            </div>
+
+            <div class="input-area">
+                <input
+                    id="taskInput"
+                    type="text"
+                    placeholder="Enter a new task..."
+                    onkeypress="handleEnter(event)"
+                >
+
+                <button class="add-btn" onclick="addTask()">
+                    + Add Task
+                </button>
+            </div>
+
+            <ul id="taskList" class="task-list"></ul>
+
+        </div>
+
+        <!-- DevOps Information -->
+        <section class="devops">
+
+            <div class="devops-box">
+                <h3>🐳 Docker</h3>
+                <p>
+                    Application is containerized for consistent execution.
+                </p>
+            </div>
+
+            <div class="devops-box">
+                <h3>⚙️ Jenkins</h3>
+                <p>
+                    Automated CI pipeline runs tests and builds the Docker image.
+                </p>
+            </div>
+
+            <div class="devops-box">
+                <h3>🔗 GitHub</h3>
+                <p>
+                    Source code is version controlled and integrated with Jenkins.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        TaskFlow DevOps CI Demo • Node.js • Docker • Jenkins • GitHub
+    </footer>
+
 
     <script>
+
+        // Load all tasks
         async function loadTasks() {
-            const response = await fetch("/api/tasks");
-            const tasks = await response.json();
 
-            const list = document.getElementById("taskList");
+            try {
 
-            list.innerHTML = "";
+                const response = await fetch("/api/tasks");
+                const tasks = await response.json();
 
-            tasks.forEach(task => {
-                list.innerHTML += `
-                    <li>
-                        ${task.title}
-                        <button onclick="deleteTask(${task.id})">
-                            Delete
-                        </button>
-                    </li>
-                `;
-            });
+                const list = document.getElementById("taskList");
+
+                list.innerHTML = "";
+
+                if (tasks.length === 0) {
+
+                    list.innerHTML = `
+                        <div class="empty">
+                            No tasks yet. Add your first task 🚀
+                        </div>
+                    `;
+
+                    return;
+                }
+
+                tasks.forEach(task => {
+
+                    list.innerHTML += `
+                        <li class="task-item">
+
+                            <span class="task-text">
+                                ${escapeHTML(task.title)}
+                            </span>
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteTask(${task.id})"
+                            >
+                                Delete
+                            </button>
+
+                        </li>
+                    `;
+
+                });
+
+            } catch (error) {
+
+                console.error("Failed to load tasks:", error);
+
+            }
         }
 
+
+        // Add task
         async function addTask() {
+
             const input = document.getElementById("taskInput");
 
-            if (!input.value.trim()) return;
+            const title = input.value.trim();
 
-            await fetch("/api/tasks", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    title: input.value
-                })
-            });
+            if (!title) {
+                return;
+            }
 
-            input.value = "";
+            try {
 
-            loadTasks();
+                await fetch("/api/tasks", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        title: title
+                    })
+
+                });
+
+                input.value = "";
+
+                loadTasks();
+
+            } catch (error) {
+
+                console.error("Failed to add task:", error);
+
+            }
         }
 
+
+        // Delete task
         async function deleteTask(id) {
-            await fetch(`/api/tasks/${id}`, {
-                method: "DELETE"
-            });
 
-            loadTasks();
+            try {
+
+                await fetch(`/api/tasks/${id}`, {
+                    method: "DELETE"
+                });
+
+                loadTasks();
+
+            } catch (error) {
+
+                console.error("Failed to delete task:", error);
+
+            }
         }
 
+
+        // Press Enter to add task
+        function handleEnter(event) {
+
+            if (event.key === "Enter") {
+                addTask();
+            }
+
+        }
+
+
+        // Prevent HTML injection
+        function escapeHTML(text) {
+
+            const div = document.createElement("div");
+
+            div.textContent = text;
+
+            return div.innerHTML;
+
+        }
+
+
+        // Initial load
         loadTasks();
+
     </script>
 
 </body>
